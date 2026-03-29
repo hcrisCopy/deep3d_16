@@ -150,7 +150,8 @@ class Mov3dDataset(Dataset):
         limg = _decode_jpg(sl)   # BGR uint8 HWC
         rimg = _decode_jpg(sr)
 
-        # Resize to data_shape if necessary
+        # Resize to data_shape if necessary.
+        # Note: cv2.resize takes (width, height) while numpy shape is (H, W).
         if limg.shape[:2] != (H, W):
             limg = cv2.resize(limg, (W, H))
         if rimg.shape[:2] != (H, W):

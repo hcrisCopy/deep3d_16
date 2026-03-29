@@ -52,7 +52,7 @@ def get_args():
 
 
 def setup_logging(prefix: str):
-    ts = datetime.now().strftime('_%Y_%m_%d-%H_%M.log')
+    ts = datetime.now().strftime('_%Y_%m_%d-%H_%M_%S.log')
     log_path = prefix + ts
     os.makedirs(os.path.dirname(log_path) if os.path.dirname(log_path) else '.', exist_ok=True)
     logging.basicConfig(

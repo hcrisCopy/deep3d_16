@@ -261,8 +261,11 @@ def get_clip_rect(fname: str, vert=True):
     """
     assert vert, "Only vertical (side-by-side) format is supported."
     cap = cv2.VideoCapture(fname)
+    fps = int(cap.get(cv2.CAP_PROP_FPS)) or 24
+    skip_frames = fps * 60 * 2  # skip first 2 minutes of logos
+    accum_frames = fps * 60     # accumulate 1 minute of frames
     # Skip first 2 minutes of logos
-    for _ in range(24 * 60 * 2):
+    for _ in range(skip_frames):
         assert cap.isOpened()
         assert cap.read()[0]
 
@@ -272,11 +275,11 @@ def get_clip_rect(fname: str, vert=True):
     assert shape[0] >= 800
 
     acc = np.zeros(shape, dtype=np.float64)
-    for _ in range(24 * 60):
+    for _ in range(accum_frames):
         ret, frame = cap.read()
         assert ret
         acc += frame
-    acc /= (24 * 60)
+    acc /= accum_frames
 
     y0 = 0
     while acc[y0].mean() < 2:
